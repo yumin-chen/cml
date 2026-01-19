@@ -1,3 +1,8 @@
+---
+Version: 0.0.1
+Date: 2025-01-19
+---
+
 # CML Canonical Serialisation & CID Stability Design Document
 
 ## Overview
