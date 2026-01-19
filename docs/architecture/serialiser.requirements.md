@@ -7,7 +7,7 @@ Date: 2025-01-19
 
 ## Introduction
 
-This specification defines the requirements for implementing canonical serialisation of **CML (Computation Modeling Language)** — a closed, deterministic algebra for representing executable semantics as pure data. CML values are immutable, content-addressed, and context-independent. The serialiser is implemented using PKL's Reflection module and its Pantry Syntax module and related renderer for XML. The system must ensure deterministic, lossless, context-free mapping from CML values to byte sequences while maintaining CID (Content Identifier) stability and perfect diff capability.
+This specification defines the requirements for implementing canonical serialisation of **CML (Computation Modeling Language)** — a closed, deterministic algebra for representing executable semantics as pure data. CML values are immutable, structrually-typed, content-addressed, and context-dependent. The serialiser is implemented using PKL's Reflection module and its Pantry Syntax module and related renderer for XML. The system must ensure deterministic, lossless, context-free mapping from CML values to byte sequences while maintaining CID (Content Identifier) stability and perfect diff capability.
 
 The implementation follows a strict Merkle-DAG construction pipeline:
 1. **Introspection**: PKL_Reflection reads the CML instance
@@ -20,17 +20,29 @@ Canonical serialisation is defined abstractly. XML is a non-normative rendering 
 
 ## Glossary
 
-- **CML**: **CML (Computation Modeling Language)** — a closed, deterministic algebra for representing executable semantics as pure data. CML values are immutable, content-addressed, and context-independent
+- **CML**: **CML (Computation Modeling Language)** — a closed, deterministic algebra for representing executable semantics as pure data. CML values are immutable, content-addressed, and context-independent. **CML maintains a "Hermetic Seal" at M3 - pure algebraic truth below, social truth above.**
 - **CID**: Content Identifier - a deterministic hash derived from canonical serialised form
-- **M3**: The closed, immutable algebra of computation modeled by CML. Canonical serialisation is a mechanism used to derive stable identifiers for M3 values
-- **PKL**: A configuration language with reflection and rendering capabilities (reference implementation)
-- **PKL_Reflection**: PKL's core reflection module for runtime type introspection
-- **PKL_Syntax**: The pkl.experimental.syntax package for representing AST structures as data
-- **PKL_Pantry**: PKL's package ecosystem containing experimental and utility modules
-- **Canonical_Serialiser**: The system component responsible for deterministic serialisation
-- **XML_Renderer**: PKL's XML output generation component (non-normative rendering)
-- **BLAKE3_Hasher**: The hashing component for CID generation
-- **CML_Node**: A construct belonging to the closed set of node kinds defined by the CML algebra (Unit, Block, Expression, etc.), with deterministic serialisation
+- **Hermetic Seal**: The boundary at M3 that separates pure algebraic truth (M1-M3) from social truth (M4-M5)
+- **M0**: Runtime Instances - TruffleNode instances executing pure mathematical operations
+- **M1**: **CML Artifacts** - "Frozen snapshots" of pure mathematical logic with CID identity (WHERE CML LIVES)
+- **M2**: CML Metamodel - Mathematical "grammar" defining operations with universal meaning (Unit, BinOp, Literal, etc.)
+- **M3**: Meta-CML - Self-describing "physics" of component structure - the hermetic seal boundary
+- **M4**: CML-COB - "Envelope" layer carrying M1 logic into social world via signed operations
+- **M5**: User Node - "Actor" layer with Node Identity (NID/DID) for entities who sign operations
+- **Model of Computation**: CML artifacts are pure mathematical data that describe computation universally
+- **Mechanism of Execution**: Interpreters and compilers (M0 tools) that execute pure mathematical logic
+- **COB**: Collaborative Object - manages evolution of M1 artifacts through signed operations without contaminating them
+- **NID**: Node Identity - Decentralised identifier for actors who can sign operations (social layer)
+- **Algebraic Truth**: Universal mathematical reality that produces identical results regardless of social context
+- **Social Truth**: Collaborative reality involving actors, governance, and historical processes
+- **Rust_Enum**: Rust's enum system for pattern matching and compile-time guarantees
+- **Serde**: Rust serialisation framework with derive macros for deterministic binary output
+- **Bincode**: Deterministic binary serialisation format for Rust
+- **Canonical_Serialiser**: The system component responsible for deterministic serialisation using Rust
+- **MDX_Renderer**: Rust-based MDX output generation component for enum instances
+- **BLAKE3_Hasher**: Native Rust hashing component for CID generation using blake3 crate
+- **CML_Node**: A Rust enum variant belonging to the closed set of node kinds defined by the CML algebra
+- **Meta-CML**: The M3 meta-metamodel that defines the grammar for creating CML language constructs using Rust enums
 - **Merkle_Tree**: A tree structure where each node is identified by the hash of its content
 
 ## Requirements
@@ -217,6 +229,8 @@ Canonical serialisation is defined abstractly. XML is a non-normative rendering 
 1. THE Canonical_Serialiser SHALL NOT encode execution order
 2. THE Canonical_Serialiser SHALL NOT encode evaluation strategy
 3. THE Canonical_Serialiser SHALL NOT encode runtime behavior
+4. THE Canonical_Serialiser SHALL maintain that CML artifacts are pure data that model computation but don't execute themselves
+5. THE Canonical_Serialiser SHALL ensure that interpreters and compilers (M0 tools) are separate from CML artifacts (M1 data)
 ### Requirement 17: PKL Pantry Integration
 
 **User Story:** As a CML implementer, I want to leverage PKL Pantry modules, so that I can use proven AST manipulation and code generation patterns.
@@ -276,7 +290,7 @@ Canonical serialisation is defined abstractly. XML is a non-normative rendering 
 
 ### Requirement 22: MDX Authoring Layer
 
-**User Story:** As a CML author, I want to use MDX for component authoring, so that I can write literate CML with excellent developer experience.
+**User Story:** As a CML author, I want to use MDX for component authoring with localisation support, so that I can write literate CML with excellent developer experience while maintaining CID stability across different contexts.
 
 #### Acceptance Criteria
 
@@ -285,8 +299,57 @@ Canonical serialisation is defined abstractly. XML is a non-normative rendering 
 3. THE System SHALL render MDX files to produce Canonical Manifests containing CIDs of all defined components
 4. THE System SHALL treat MDX Content (Markdown text) as Meta-Attributes excluded from semantic hash
 5. THE System SHALL ensure MDX-authored components produce identical CIDs to manually constructed equivalent components
+6. THE System SHALL support YAML frontmatter for localisable context metadata
+7. THE System SHALL inject frontmatter values as Props (non-hashed attributes) into CML components
+8. THE System SHALL maintain CID stability when frontmatter values change (locale, author, date, etc.)
 
-### Requirement 23: External Resource Reader Protocol
+### Requirement 23: M3 Localisation Pattern
+
+**User Story:** As a CML system architect, I want strict separation between Identity (hashable code) and Context (localisable metadata), so that the same semantic content can be presented in different locales without affecting CIDs.
+
+#### Acceptance Criteria
+
+1. THE System SHALL implement M3 Localisation Pattern with YAML frontmatter as Context container
+2. THE System SHALL treat YAML frontmatter as "outside the executable tree" and exclude from CID calculation
+3. THE System SHALL inject frontmatter values as Props (meta attributes) into CML components
+4. THE System SHALL support dynamic rendering based on locale-aware frontmatter props
+5. THE System SHALL enable infinite modification of frontmatter without changing CML logic CIDs
+6. THE System SHALL provide Context Provider for mapping frontmatter keys to component props
+7. THE System SHALL support multi-locale presentation of identical semantic content
+
+### Requirement 24: MOF Architecture Compliance with Hermetic Seal
+
+**User Story:** As a CML system architect, I want MOF (Meta-Object Facility) architecture compliance with proper hermetic seal, so that CML maintains pure algebraic truth below M3 and enables social coordination above M3.
+
+#### Acceptance Criteria
+
+1. THE System SHALL maintain a "Hermetic Seal" at M3 separating pure algebraic truth from social truth
+2. THE System SHALL ensure M1-M3 contain only pure mathematical logic with no social metadata
+3. THE System SHALL position CML Artifacts as M1 ("Frozen Snapshots") - pure mathematical logic with CID identity (WHERE CML LIVES)
+4. THE System SHALL position CML Metamodel as M2 ("Grammar") - mathematical operations with universal meaning
+5. THE System SHALL implement Meta-CML as M3 ("Physics") - self-describing component structure rules
+6. THE System SHALL position Runtime as M0 - pure mathematical execution separate from social concerns
+7. THE System SHALL position CML-COB as M4 ("Envelope") - carries M1 logic into social world without contamination
+8. THE System SHALL position User Node as M5 ("Actor") - provides Node Identity (NID/DID) for signing operations
+9. THE System SHALL ensure identical M1 CIDs produce identical results regardless of social context
+10. THE System SHALL prevent social concerns from leaking into the pure mathematical layers (M1-M3)
+
+### Requirement 25: CML Artifact Ontology (MDX Integration)
+
+**User Story:** As a CML system architect, I want clear ontological positioning of CML artifacts within the MDX ecosystem, so that the relationship between MDX components and CML components is precisely defined.
+
+#### Acceptance Criteria
+
+1. THE System SHALL position CmlComponent as M3-level formalisation of MDX Component concept
+2. THE System SHALL implement CmlComponent as Merkle-Node Template with three distinct sectors
+3. THE System SHALL ensure Hashed Body (Children) defines core identity where children changes alter CID
+4. THE System SHALL ensure Non-Hashed Metadata (Props/Attributes) provides tooling hints without affecting CID
+5. THE System SHALL ensure tagType (FQN) provides type identity uniqueness
+6. THE System SHALL implement Canonical Projection rendering flow from MDX to Merkle
+7. THE System SHALL ensure different tagTypes with identical content produce different CIDs
+8. THE System SHALL map MDX ecosystem concepts to MOF layers correctly
+
+### Requirement 26: External Resource Reader Protocol
 
 **User Story:** As a CML implementer, I want robust external BLAKE3 integration, so that hashing works reliably for large component trees.
 
