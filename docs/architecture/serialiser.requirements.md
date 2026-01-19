@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This specification defines the requirements for implementing canonical serialisation of CML (Computation Modeling Language), a subset and an extension of XML using a metamodel-driven approach. The serialiser is implemented using PKL's Reflection module and its Pantry Syntax module and related renderer for XML. The system must ensure deterministic, lossless, context-free mapping from CML values to byte sequences while maintaining CID (Content Identifier) stability and perfect diff capability.
+This specification defines the requirements for implementing canonical serialisation of **CML (Computation Modeling Language)** — a closed, deterministic algebra for representing executable semantics as pure data. CML values are immutable, content-addressed, and context-independent. The serialiser is implemented using PKL's Reflection module and its Pantry Syntax module and related renderer for XML. The system must ensure deterministic, lossless, context-free mapping from CML values to byte sequences while maintaining CID (Content Identifier) stability and perfect diff capability.
 
 The implementation follows a strict Merkle-DAG construction pipeline:
 1. **Introspection**: PKL_Reflection reads the CML instance
@@ -15,7 +15,7 @@ Canonical serialisation is defined abstractly. XML is a non-normative rendering 
 
 ## Glossary
 
-- **CML**: Computation Modeling Language - a pure data language for representing executable semantics as immutable structure
+- **CML**: **CML (Computation Modeling Language)** — a closed, deterministic algebra for representing executable semantics as pure data. CML values are immutable, content-addressed, and context-independent
 - **CID**: Content Identifier - a deterministic hash derived from canonical serialised form
 - **M3**: The closed, immutable algebra of computation modeled by CML. Canonical serialisation is a mechanism used to derive stable identifiers for M3 values
 - **PKL**: A configuration language with reflection and rendering capabilities (reference implementation)
@@ -25,7 +25,7 @@ Canonical serialisation is defined abstractly. XML is a non-normative rendering 
 - **Canonical_Serialiser**: The system component responsible for deterministic serialisation
 - **XML_Renderer**: PKL's XML output generation component (non-normative rendering)
 - **BLAKE3_Hasher**: The hashing component for CID generation
-- **CML_Node**: Any valid node in the CML algebra (Unit, Block, Expression, etc.)
+- **CML_Node**: A construct belonging to the closed set of node kinds defined by the CML algebra (Unit, Block, Expression, etc.), with deterministic serialisation
 - **Merkle_Tree**: A tree structure where each node is identified by the hash of its content
 
 ## Requirements

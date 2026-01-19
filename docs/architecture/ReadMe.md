@@ -2,9 +2,13 @@
 Version: 0.0.1
 ---
 
-# CML — Computation Modeling Language
+# CML
 
 > CML freezes computation into data, so meaning can be shared without coordination.
+
+**CML (Computation Modeling Language)** is a closed, deterministic algebra for representing executable semantics as pure data. CML values are immutable, content-addressed, and context-independent. CML defines what something is, not its execution or history.
+
+CML is a semantic substrate that brings deterministic meaning, stable identity, and conflict-free evolution to the data modeling world, unifying principles from semantic web, event sourcing, and distributed version control into a single coherent architecture.**
 
 CML is a pure data language for representing executable meaning as immutable structure.
 
@@ -13,6 +17,20 @@ It is designed to interoperate with **content addressing (CID)**, **append-only 
 ---
 
 ## Why CML Exists
+
+> CML fills a real gap in the data systems landscape: Stable meaning with immutable identity and conflict-free evolution.
+
+It solves:
+- reproducibility
+- merging
+- deduplication
+- history
+- cross-repo semantics
+
+Without requiring:
+- central coordination
+- runtime execution
+- language binding
 
 Modern systems conflate three fundamentally different things:
 
@@ -42,6 +60,8 @@ M2 — Structural relations
 M3 — Executable meaning (CML)
 M4 — Assertions & history
 ```
+
+**A layer is a conceptual domain with its own invariants. Higher layers may reference lower layers but must not alter their invariants.**
 
 CML formalizes **M3**: the layer where computation exists as *data*, not as runtime, process, or state.
 
@@ -103,7 +123,7 @@ Each CML node is:
 CML does **not**:
 
 * execute code
-* model threads or memory
+* model runtime state or execution semantics
 * perform IO
 * encode authorship or timestamps
 * resolve conflicts
@@ -282,6 +302,11 @@ CML explicitly does **not** aim to be:
 * a package manager
 * a blockchain
 * a governance system
+
+**Explicit Non-Goals:**
+
+* **No evaluation semantics**: CML does not define order of evaluation or execution strategy
+* **No runtime effects**: CML cannot represent side effects like IO
 
 Those can be built *on top*.
 
@@ -470,7 +495,7 @@ Meaning(node, context₁) = Meaning(node, context₂)
 
 **Definition**
 
-> Equality is structural, not nominal.
+> Equality is structural, not nominal. Structural equality must treat variable binding and names as alpha-equivalent.
 
 ```text
 A == B ⇔ canonical(A) == canonical(B)
@@ -481,6 +506,7 @@ A == B ⇔ canonical(A) == canonical(B)
 * No pointer identity
 * No object identity
 * No hidden fields
+* Variable names do not affect CID identity
 
 ---
 
@@ -579,6 +605,11 @@ CML explicitly does **not** model:
 * versions
 * histories
 
+**Explicit Non-Goals:**
+
+* **No evaluation semantics**: CML does not define order of evaluation or execution strategy
+* **No runtime effects**: CML cannot represent side effects like IO
+
 Those are **M0 or M4 concerns**.
 
 ---
@@ -603,3 +634,127 @@ Because M3 obeys these invariants:
 This is why **M4 must exist** — and why it must be separate.
 
 ---
+
+# CML in the "Code as Data" Systems Landscape
+
+## Current Landscape: Code as Data / No/Low-Code / Schema-Free Data Modeling
+
+CML enters and improves upon the existing data systems landscape by addressing fundamental gaps in semantic stability and identity.
+
+### Major Categories in the No-Code Space
+
+| Category | Typical Tools | Traits |
+|----------|---------------|--------|
+| Schema-free JSON stores | MongoDB, CouchBase | Flexible, weak semantics |
+| No-code platforms | Airtable, Notion, Retool | Easy UI, shallow semantics |
+| Low-code ER modeling | Hasura, Prisma | Strong schema, limited evolution |
+| Semantic web | RDF/SPARQL, OWL | Formal semantics, poor tooling |
+| Event sourcing | EventStore, Kafka | Append-only events, weak semantics |
+| Knowledge graphs | Neo4j, TigerGraph | Rich relationships, no evolution model |
+
+## Common Pain Points and Gripes
+
+### 1. Meaning vs State Confusion
+Systems like MongoDB and Airtable store state, not semantic meaning. You get:
+- lost context
+- overwrites
+- no reproducibility
+
+**Why CML matters**: CML separates meaning (static) from state (runtime), so "what it means" is stable.
+
+### 2. Lack of Stable Identity
+Most systems identify records by:
+- auto-generated IDs
+- mutable keys
+- implicit names
+
+This creates:
+- fragile references
+- rename pain
+- semantic drift
+
+**Why CML matters**: Content-addressing via CID fixes identity to meaning, not labels.
+
+### 3. Evolution History Is Missing or Shallow
+Many platforms:
+- drop history
+- overwrite changes
+- require external auditing
+
+Even git only tracks snapshots, not artifact identity.
+
+**Why CML+M4 matters**: Evolution is made explicit in M4, not conflated with structure.
+
+### 4. Semantic Ambiguity
+Schema-free stores lack meaning:
+```json
+{ "wingspan": 25 }
+```
+What is that?
+
+CML forces:
+- explicit types
+- canonical structure
+- closed algebra
+
+### 5. Poor Diff/Merge Support
+JSON diffs are messy. Merges are conflict prone.
+
+CML solves this with deterministic canonical serialization and Merkle hashing.
+
+### 6. Tooling Fragmentation
+Semantic web (RDF/OWL) has formal meaning but poor adoption/UX. No-code has good UX but no semantics.
+
+CML bridges real semantics with practical tooling.
+
+### 7. Execution and Meaning Are Conflated
+In many systems (e.g., SQL/ORM):
+data + transformation + query + model all blur
+
+CML separates meaning (M3) from execution (engine behavior) clearly.
+
+## Gaps in Existing Systems That CML Addresses
+
+| Gap | CML Capability |
+|-----|----------------|
+| No immutable semantics | Yes (M3 CML) |
+| No clean identity | Yes (CID) |
+| No evolution model | Yes (M4 assertions) |
+| Poor diff/merge | Yes (canonical serialization) |
+| Meaning/state conflation | Separated by design |
+| Tool independence | Yes (canonical form) |
+| Multi-language semantics | Yes (closed algebra) |
+
+## Pitfalls in the Current Landscape
+
+### 1. RDF Semantics Without Practical Identity
+RDF treats meaning but:
+- mixes provenance
+- lacks canonical identity
+- lacks evolution model
+
+### 2. Event Sourcing Without Rich Semantics
+Event stores:
+- capture history
+- but lack semantic models
+
+CML + M4 gives semantics to events.
+
+### 3. Graph DBs Without Canonical Identity
+Neo4j and similar are great for relationships but lack:
+- canonical serialization
+- content hashing
+- evolution models
+
+CML fills the identity gap.
+
+### 4. Low-Code / No-Code Mess
+Platform limitations:
+- lock-in
+- weak semantics
+- unintended mutability
+
+CML provides:
+- strong semantics
+- reproducibility
+- independent tooling

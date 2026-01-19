@@ -2,7 +2,9 @@
 Version: 0.0.1
 ---
 
-# CML — Computation Modeling Language
+# CML
+
+**CML (Computation Modeling Language)** is a closed, deterministic algebra for representing executable semantics as pure data. CML values are immutable, content-addressed, and context-independent. CML defines what something is, not its execution or history.
 
 > CML is a closed, pure, immutable algebra of computational meaning expressed as data.
 
@@ -43,7 +45,7 @@ As **values**.
 
 CML does **not** represent:
 
-- execution
+- runtime state or execution semantics
 - threads
 - memory
 - IO
@@ -318,6 +320,8 @@ Constraints are **logical predicates**, not runtime checks.
 ---
 
 ## 14. Canonical Serialisation
+
+CML nodes are serialisable into a canonical form (e.g., canonical XML, length-prefixed binary, or JSON-LD), from which content identifiers (CIDs) are derived.
 
 Canonicalisation rules:
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the design for a Component-Oriented Merkle-DAG canonical serialisation system for CML (Computation Modeling Language), implemented as importable PKL classes with strict separation between Props (metadata) and Children (semantic content). The system ensures deterministic, stable Content Identifiers (CIDs) across implementations and platforms while supporting MDX authoring workflows.
+This document describes the design for a Component-Oriented Merkle-DAG canonical serialisation system for **CML (Computation Modeling Language)** — a closed, deterministic algebra for representing executable semantics as pure data. The system is implemented as importable PKL classes with strict separation between Props (metadata) and Children (semantic content), ensuring deterministic, stable Content Identifiers (CIDs) across implementations and platforms while supporting MDX authoring workflows.
 
 The core innovation is treating CML as a tree of Importable Components where:
 - **Props-Transparent Rule**: XML attributes (metadata/context) are NEVER hashed
